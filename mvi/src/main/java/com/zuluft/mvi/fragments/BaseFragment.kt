@@ -121,18 +121,6 @@ abstract class BaseFragment<V : Any, P : BasePresenter<V, out BaseView<V>>>
         super.onDestroy()
     }
 
-    open fun showErrorMessage(throwable: Throwable) {
-        if (throwable is HttpException) {
-            showErrorMessageAlertDialog(throwable.response().errorBody()!!.string(),
-                    null)
-        } else {
-            showErrorMessageAlertDialog(getString(R.string.connection_problem_error_text),
-                    DialogInterface.OnClickListener { _, _ ->
-                        val intent = Intent(Settings.ACTION_WIRELESS_SETTINGS)
-                        startActivity(intent)
-                    })
-        }
-    }
 
     private fun showErrorMessageAlertDialog(errorMessage: String,
                                             onClickListener: DialogInterface.OnClickListener?) {
