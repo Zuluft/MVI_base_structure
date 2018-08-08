@@ -11,6 +11,12 @@ android {
         targetSdkVersion target_sdk_version
         versionCode 1
         versionName "1.0"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath false
+            }
+        }
     }
 
     buildTypes {
@@ -54,4 +60,6 @@ dependencies {
     api "android.arch.persistence.room:rxjava2:$room_version"
     //fresco
     api "com.facebook.fresco:fresco:$fresco_version"
+
+    api 'com.f2prateek.rx.preferences2:rx-preferences:2.0.0-RC3'
 }
