@@ -1,0 +1,57 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group = 'com.github.Zuluft'
+
+android {
+    compileSdkVersion compile_sdk_version
+
+    defaultConfig {
+        minSdkVersion min_sdk_version
+        targetSdkVersion target_sdk_version
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    api "com.android.support:appcompat-v7:$support_version"
+    api "com.android.support:support-v13:$support_version"
+    api "com.android.support:recyclerview-v7:$support_version"
+    api "com.android.support:cardview-v7:$support_version"
+    api "com.android.support.constraint:constraint-layout:$constraint_layout_version"
+    api "com.android.support:design:$support_version"
+    //auto adapter
+    api "com.github.Zuluft:AutoAdapter:$auto_adapter_version"
+    //safe fragment transaction
+    api "com.github.zuluft.safefragmenttransaction:lib:v$safe_fragment_transaction_version"
+    api "com.github.zuluft.safefragmenttransaction:impl:v$safe_fragment_transaction_version"
+    //dagger
+    api "com.google.dagger:dagger:$dagger_version"
+    api "com.google.dagger:dagger-android-support:$dagger_version"
+    //rx java 2
+    api "io.reactivex.rxjava2:rxandroid:$rx_android_version"
+    api "io.reactivex.rxjava2:rxjava:$rx_java_version"
+    //retrofit
+    api "com.squareup.retrofit2:retrofit:$retrofit_version"
+    api "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    api "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
+    //rx binding
+    api "com.jakewharton.rxbinding2:rxbinding:$rx_binding_version"
+    //room
+    api "android.arch.persistence.room:runtime:$room_version"
+    api "android.arch.persistence.room:rxjava2:$room_version"
+    //fresco
+    api "com.facebook.fresco:fresco:$fresco_version"
+}
