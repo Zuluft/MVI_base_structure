@@ -9,8 +9,10 @@ import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.zuluft.mvi.annotations.LayoutResourceId
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import com.zuluft.impl.SafeFragmentTransactorFragment
+import com.zuluft.mvi.annotations.LayoutResourceId
 import com.zuluft.mvi.presenters.BasePresenter
 import com.zuluft.mvi.views.BaseView
 import dagger.Lazy
@@ -18,12 +20,6 @@ import dagger.android.support.AndroidSupportInjection
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
-import android.view.inputmethod.InputMethodManager
-import com.zuluft.mvi.R
-import retrofit2.HttpException
-import android.content.Intent
-import android.provider.Settings
-import android.view.WindowManager
 
 
 abstract class BaseFragment<V : Any, P : BasePresenter<V, out BaseView<V>>>
