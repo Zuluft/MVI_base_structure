@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'kotlin-kapt'
 
 group = 'com.github.Zuluft'
 
@@ -32,7 +33,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     api "com.android.support:appcompat-v7:$support_version"
     api "com.android.support:support-v13:$support_version"
@@ -62,6 +62,6 @@ dependencies {
     api "android.arch.persistence.room:rxjava2:$room_version"
     //fresco
     api "com.facebook.fresco:fresco:$fresco_version"
-
+    //rx preferences
     api 'com.f2prateek.rx.preferences2:rx-preferences:2.0.0-RC3'
 }

@@ -94,8 +94,8 @@ abstract class BaseFragment<V : Any, P : BasePresenter<V, out BaseView<V>>>
     protected abstract fun onPresenterReady(presenter: P)
 
     @Suppress("MemberVisibilityCanBePrivate")
-    protected fun createView(inflater: LayoutInflater,
-                             container: ViewGroup?): View? {
+    protected open fun createView(inflater: LayoutInflater,
+                                  container: ViewGroup?): View? {
         var view: View? = null
         val layoutResourceId = javaClass.getAnnotation(LayoutResourceId::class.java)
         if (layoutResourceId != null) {
