@@ -13,7 +13,7 @@ buildscript {
     ext.rx_binding_version = '2.0.0'
     ext.constraint_layout_version = "1.1.2"
     ext.safe_fragment_transaction_version = "1.1.2"
-    ext.auto_adapter_version = "2.5"
+    ext.auto_adapter_version = "2.5.1"
     ext.room_version = "1.1.1"
     ext.google_services_version = '3.2.1'
     ext.google_play_services_version = '15.0.2'
