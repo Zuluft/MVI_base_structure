@@ -1,17 +1,18 @@
-package com.zuluft.mvi.fragments
+package com.zuluft.mvi.dialogs
 
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.support.constraint.Guideline
+import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import android.view.inputmethod.InputMethodManager
-import com.zuluft.impl.SafeFragmentTransactorFragment
+import com.zuluft.mvi.R
 import com.zuluft.mvi.annotations.LayoutResourceId
 import com.zuluft.mvi.presenters.BasePresenter
 import com.zuluft.mvi.views.BaseView
@@ -23,8 +24,8 @@ import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 
-abstract class BaseFragment<V : Any, P : BasePresenter<V, out BaseView<V>>>
-    : SafeFragmentTransactorFragment() {
+abstract class BaseDialogFragment<V : Any, P : BasePresenter<V, out BaseView<V>>> :
+        DialogFragment() {
 
     private lateinit var compositeDisposable: CompositeDisposable
     private var presenter: P? = null
@@ -35,13 +36,57 @@ abstract class BaseFragment<V : Any, P : BasePresenter<V, out BaseView<V>>>
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return createView(inflater, container)
+        val rootView = inflater.inflate(R.layout.layout_dialog_fragment_container,
+                container, false)
+        val widthPercent = getWidthPercent()
+        val startPercent = (1f - widthPercent) / 2f
+        val endPercent = 1f - startPercent
+        val startGuideline = rootView.findViewById<Guideline>(R.id.startGuideline)
+        val endGuideline = rootView.findViewById<Guideline>(R.id.endGuideline)
+        startGuideline.setGuidelinePercent(startPercent)
+        endGuideline.setGuidelinePercent(endPercent)
+        val contentViewGroup = rootView.findViewById<ViewGroup>(R.id.flDialogContent)
+        contentViewGroup.addView(createView(inflater, contentViewGroup))
+        val window = dialog.window
+        if (window != null) {
+            window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            setStyle(DialogFragment.STYLE_NO_FRAME, android.R.style.Theme)
+        }
+        if (isClosable()) {
+            rootView.setOnTouchListener { _, _ ->
+                dismissAndClearDialogs()
+                true
+            }
+        }
+        return rootView
     }
+
+    protected open fun isClosable(): Boolean {
+        return true
+    }
+
+    abstract fun getWidthPercent(): Float
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         renderView(view, savedInstanceState)
         AndroidSupportInjection.inject(this)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val dialog = dialog
+        if (dialog != null) {
+            val window = dialog.window
+            val width = ViewGroup.LayoutParams.MATCH_PARENT
+            val height = ViewGroup.LayoutParams.WRAP_CONTENT
+            window?.setLayout(width, height)
+        }
+    }
+
+    protected fun registerDisposables(vararg disposables: Disposable) {
+        compositeDisposable.addAll(*disposables)
     }
 
     protected fun registerDialog(dialog: Dialog) {
@@ -141,9 +186,5 @@ abstract class BaseFragment<V : Any, P : BasePresenter<V, out BaseView<V>>>
             val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
-    }
-
-    protected fun registerDisposables(vararg disposables: Disposable) {
-        compositeDisposable.addAll(*disposables)
     }
 }

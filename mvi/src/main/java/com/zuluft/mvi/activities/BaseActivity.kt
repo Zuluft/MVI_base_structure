@@ -9,6 +9,7 @@ import dagger.Lazy
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 
@@ -61,6 +62,10 @@ abstract class BaseActivity<V : Any, P : BasePresenter<V, out BaseView<V>>>
         presenter!!.detach(isFinishing)
         compositeDisposable.clear()
         super.onDestroy()
+    }
+
+    protected fun registerDisposables(vararg disposables: Disposable) {
+        compositeDisposable.addAll(*disposables)
     }
 
 }
