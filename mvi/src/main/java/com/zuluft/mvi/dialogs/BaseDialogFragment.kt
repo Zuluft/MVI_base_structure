@@ -27,7 +27,7 @@ import javax.inject.Inject
 abstract class BaseDialogFragment<V : Any, P : BasePresenter<V, out BaseView<V>>> :
         DialogFragment() {
 
-    private lateinit var compositeDisposable: CompositeDisposable
+    private val compositeDisposable = CompositeDisposable()
     private var presenter: P? = null
 
     private val dialogsList: ArrayList<Dialog> = ArrayList()
@@ -121,7 +121,6 @@ abstract class BaseDialogFragment<V : Any, P : BasePresenter<V, out BaseView<V>>
     @Suppress("RedundantVisibilityModifier", "unused")
     public fun subscribe(continuousViewStateObservable: Observable<V>,
                          viewStateObservable: Observable<V>) {
-        compositeDisposable = CompositeDisposable()
         compositeDisposable.add(viewStateObservable.subscribe(this::reflectState))
         compositeDisposable.add(continuousViewStateObservable.subscribe(this::reflectState))
     }
