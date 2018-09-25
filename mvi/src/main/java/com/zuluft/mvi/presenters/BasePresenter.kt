@@ -8,7 +8,6 @@ import com.zuluft.mvi.actions.ViewStateAction
 import com.zuluft.mvi.views.BaseView
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
 
@@ -18,19 +17,23 @@ abstract class BasePresenter<ViewState : Any, View : BaseView<ViewState>> {
     private var view: View? = null
     private var isFirstAttach: Boolean = true
     private val viewStateSubject: PublishSubject<ViewState> = PublishSubject.create()
-    private val continuousViewStateSubject: BehaviorSubject<ViewState> = BehaviorSubject.create()
     private val perPresenterDisposables: CompositeDisposable = CompositeDisposable()
     private val perViewDisposables: CompositeDisposable = CompositeDisposable()
     private var lastState: ViewState? = null
+
+    private var isLastStateShared = false
+
 
     fun attach(view: View) {
         this.view = view
         if (isFirstAttach) {
             lastState = getInitialViewState()
         }
-        continuousViewStateSubject.onNext(lastState!!)
-        this.view!!.subscribe(continuousViewStateSubject,
-                viewStateSubject)
+        this.view!!.subscribe(viewStateSubject)
+        if (!isLastStateShared) {
+            viewStateSubject.onNext(lastState!!)
+            isLastStateShared = true
+        }
         if (isFirstAttach) {
             onFirstAttach()
         }
@@ -57,15 +60,20 @@ abstract class BasePresenter<ViewState : Any, View : BaseView<ViewState>> {
             is ViewStateAction<*> -> {
                 @Suppress("UNCHECKED_CAST")
                 val viewStateAction = action as (ViewStateAction<ViewState>)
-                val viewState = viewStateAction.newState(lastState!!)
-                if (viewStateAction.shouldBeSaved()) {
-                    lastState = viewState
-                    continuousViewStateSubject.onNext(lastState!!)
-                } else {
-                    viewStateSubject.onNext(viewState)
-                }
+                shareState(viewStateAction)
             }
             is NavigatorAction<*> -> action.commitNavigatorAction()
+        }
+    }
+
+    private fun shareState(viewStateAction: ViewStateAction<ViewState>) {
+        val viewState = viewStateAction.newState(lastState!!)
+        lastState = viewState
+        isLastStateShared = if (view != null) {
+            viewStateSubject.onNext(lastState!!)
+            true
+        } else {
+            false
         }
     }
 

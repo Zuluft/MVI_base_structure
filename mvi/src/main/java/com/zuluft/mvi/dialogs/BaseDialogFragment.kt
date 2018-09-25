@@ -23,7 +23,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
-
+@Suppress("unused")
 abstract class BaseDialogFragment<V : Any, P : BasePresenter<V, out BaseView<V>>> :
         DialogFragment() {
 
@@ -118,11 +118,8 @@ abstract class BaseDialogFragment<V : Any, P : BasePresenter<V, out BaseView<V>>
 
     protected abstract fun renderView(view: View?, savedInstanceState: Bundle?)
 
-    @Suppress("RedundantVisibilityModifier", "unused")
-    public fun subscribe(continuousViewStateObservable: Observable<V>,
-                         viewStateObservable: Observable<V>) {
+    fun subscribe(viewStateObservable: Observable<V>) {
         compositeDisposable.add(viewStateObservable.subscribe(this::reflectState))
-        compositeDisposable.add(continuousViewStateObservable.subscribe(this::reflectState))
     }
 
     protected abstract fun reflectState(state: V)

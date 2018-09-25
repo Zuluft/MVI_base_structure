@@ -12,7 +12,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
-
+@Suppress("unused")
 abstract class BaseActivity<V : Any, P : BasePresenter<V, out BaseView<V>>>
     : SafeFragmentTransactorActivity() {
 
@@ -49,11 +49,9 @@ abstract class BaseActivity<V : Any, P : BasePresenter<V, out BaseView<V>>>
     }
 
 
-    @Suppress("unused", "RedundantVisibilityModifier")
-    public fun subscribe(continuousViewStateObservable: Observable<V>,
-                         viewStateObservable: Observable<V>) {
+    @Suppress("unused")
+    fun subscribe(viewStateObservable: Observable<V>) {
         compositeDisposable.add(viewStateObservable.subscribe(this::reflectState))
-        compositeDisposable.add(continuousViewStateObservable.subscribe(this::reflectState))
     }
 
     protected abstract fun reflectState(state: V)
