@@ -26,7 +26,7 @@ import javax.inject.Inject
 abstract class BaseFragment<V : Any, P : BasePresenter<V, out BaseView<V>>>
     : SafeFragmentTransactorFragment() {
 
-    private val compositeDisposable = CompositeDisposable()
+    private var compositeDisposable: CompositeDisposable? = null
 
     private var presenter: P? = null
 
@@ -36,6 +36,7 @@ abstract class BaseFragment<V : Any, P : BasePresenter<V, out BaseView<V>>>
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        compositeDisposable = CompositeDisposable()
         return createView(inflater, container)
     }
 
@@ -76,7 +77,7 @@ abstract class BaseFragment<V : Any, P : BasePresenter<V, out BaseView<V>>>
 
     @Suppress("unused")
     fun subscribe(viewStateObservable: Observable<V>) {
-        compositeDisposable.add(viewStateObservable.subscribe(this::reflectState))
+        compositeDisposable!!.add(viewStateObservable.subscribe(this::reflectState))
     }
 
     protected abstract fun reflectState(state: V)
@@ -106,8 +107,10 @@ abstract class BaseFragment<V : Any, P : BasePresenter<V, out BaseView<V>>>
     override fun onDestroyView() {
         dismissAndClearDialogs()
         presenter?.detach(false)
-        compositeDisposable.dispose()
-        compositeDisposable.clear()
+        if (compositeDisposable != null) {
+            compositeDisposable!!.dispose()
+            compositeDisposable!!.clear()
+        }
         super.onDestroyView()
     }
 
@@ -142,6 +145,6 @@ abstract class BaseFragment<V : Any, P : BasePresenter<V, out BaseView<V>>>
     }
 
     protected fun registerDisposables(vararg disposables: Disposable) {
-        compositeDisposable.addAll(*disposables)
+        compositeDisposable!!.addAll(*disposables)
     }
 }

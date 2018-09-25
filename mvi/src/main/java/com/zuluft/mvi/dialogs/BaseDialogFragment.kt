@@ -27,7 +27,7 @@ import javax.inject.Inject
 abstract class BaseDialogFragment<V : Any, P : BasePresenter<V, out BaseView<V>>> :
         DialogFragment() {
 
-    private val compositeDisposable = CompositeDisposable()
+    private var compositeDisposable: CompositeDisposable? = null
     private var presenter: P? = null
 
     private val dialogsList: ArrayList<Dialog> = ArrayList()
@@ -59,6 +59,7 @@ abstract class BaseDialogFragment<V : Any, P : BasePresenter<V, out BaseView<V>>
                 true
             }
         }
+        compositeDisposable = CompositeDisposable()
         return rootView
     }
 
@@ -86,7 +87,7 @@ abstract class BaseDialogFragment<V : Any, P : BasePresenter<V, out BaseView<V>>
     }
 
     protected fun registerDisposables(vararg disposables: Disposable) {
-        compositeDisposable.addAll(*disposables)
+        compositeDisposable!!.addAll(*disposables)
     }
 
     protected fun registerDialog(dialog: Dialog) {
@@ -119,7 +120,7 @@ abstract class BaseDialogFragment<V : Any, P : BasePresenter<V, out BaseView<V>>
     protected abstract fun renderView(view: View?, savedInstanceState: Bundle?)
 
     fun subscribe(viewStateObservable: Observable<V>) {
-        compositeDisposable.add(viewStateObservable.subscribe(this::reflectState))
+        compositeDisposable!!.add(viewStateObservable.subscribe(this::reflectState))
     }
 
     protected abstract fun reflectState(state: V)
@@ -149,8 +150,10 @@ abstract class BaseDialogFragment<V : Any, P : BasePresenter<V, out BaseView<V>>
     override fun onDestroyView() {
         dismissAndClearDialogs()
         presenter?.detach(false)
-        compositeDisposable.dispose()
-        compositeDisposable.clear()
+        if (compositeDisposable != null) {
+            compositeDisposable!!.dispose()
+            compositeDisposable!!.clear()
+        }
         super.onDestroyView()
     }
 
