@@ -91,6 +91,10 @@ abstract class BaseFragment<V : Any, P : BasePresenter<V, out BaseView<V>>>
         onPresenterReady(presenter!!)
     }
 
+    fun getPresenter(): P {
+        return presenter!!
+    }
+
     protected abstract fun onPresenterReady(presenter: P)
 
     @Suppress("MemberVisibilityCanBePrivate")
