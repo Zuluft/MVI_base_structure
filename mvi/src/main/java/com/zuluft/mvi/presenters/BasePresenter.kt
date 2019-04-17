@@ -77,11 +77,11 @@ abstract class BasePresenter<ViewState : Any, View : BaseView<ViewState>> {
         }
     }
 
-    protected fun onDestroy() {
+    protected open fun onDestroy() {
 
     }
 
-    protected fun onDetach() {
+    protected open fun onDetach() {
 
     }
 
