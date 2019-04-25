@@ -6,7 +6,7 @@ buildscript {
     ext.min_sdk_version = 21
     ext.target_sdk_version = 28
     ext.compile_sdk_version = 28
-    ext.dagger_version = '2.15'
+    ext.dagger_version = '2.21'
     ext.rx_android_version = '2.1.0'
     ext.rx_java_version = '2.1.6'
     ext.retrofit_version = '2.3.0'
