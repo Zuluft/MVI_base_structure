@@ -34,17 +34,16 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    api "com.android.support:appcompat-v7:$support_version"
-    api "com.android.support:support-v13:$support_version"
-    api "com.android.support:recyclerview-v7:$support_version"
-    api "com.android.support:cardview-v7:$support_version"
-    api "com.android.support.constraint:constraint-layout:$constraint_layout_version"
-    api "com.android.support:design:$support_version"
+    api 'androidx.appcompat:appcompat:1.0.2'
+    api 'androidx.legacy:legacy-support-v13:1.0.0'
+    api 'androidx.recyclerview:recyclerview:1.0.0'
+    api 'androidx.cardview:cardview:1.0.0'
+    api 'androidx.constraintlayout:constraintlayout:1.1.3'
+    api 'com.google.android.material:material:1.0.0'
     //auto adapter
     api "com.github.Zuluft:AutoAdapter:$auto_adapter_version"
     //safe fragment transaction
-    api "com.github.zuluft.safefragmenttransaction:lib:v$safe_fragment_transaction_version"
-    api "com.github.zuluft.safefragmenttransaction:impl:v$safe_fragment_transaction_version"
+    api "com.github.Zuluft:SafeFragmentTransaction:v$safe_fragment_transaction_version"
     //dagger
     api "com.google.dagger:dagger:$dagger_version"
     api "com.google.dagger:dagger-android-support:$dagger_version"
@@ -58,10 +57,10 @@ dependencies {
     //rx binding
     api "com.jakewharton.rxbinding2:rxbinding:$rx_binding_version"
     //room
-    api "android.arch.persistence.room:runtime:$room_version"
-    api "android.arch.persistence.room:rxjava2:$room_version"
+    api 'androidx.room:room-runtime:2.0.0'
+    api 'androidx.room:room-rxjava2:2.0.0'
     //fresco
     api "com.facebook.fresco:fresco:$fresco_version"
     //rx preferences
-    api 'com.f2prateek.rx.preferences2:rx-preferences:2.0.0-RC3'
+    api 'com.f2prateek.rx.preferences2:rx-preferences:2.0.0'
 }

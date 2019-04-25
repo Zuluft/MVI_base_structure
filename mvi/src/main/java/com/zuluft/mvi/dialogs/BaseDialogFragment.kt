@@ -7,9 +7,9 @@ import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.support.constraint.Guideline
-import android.support.v4.app.DialogFragment
-import android.support.v7.app.AlertDialog
+import androidx.constraintlayout.widget.Guideline
+import androidx.fragment.app.DialogFragment
+import androidx.appcompat.app.AlertDialog
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import com.zuluft.mvi.R
@@ -51,7 +51,7 @@ abstract class BaseDialogFragment<V : Any, P : BasePresenter<V, out BaseView<V>>
         if (window != null) {
             window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-            setStyle(DialogFragment.STYLE_NO_FRAME, android.R.style.Theme)
+            setStyle(STYLE_NO_FRAME, android.R.style.Theme)
         }
         if (isClosable()) {
             rootView.setOnTouchListener { _, _ ->

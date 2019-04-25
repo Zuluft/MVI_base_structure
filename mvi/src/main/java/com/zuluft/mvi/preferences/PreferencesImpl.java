@@ -2,7 +2,7 @@ package com.zuluft.mvi.preferences;
 
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
 
